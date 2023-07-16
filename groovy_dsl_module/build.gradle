@@ -5,7 +5,7 @@ plugins {
 group = 'com.kousenit'
 version = '1.0'
 
-task zip(type: Zip) {
+tasks.register('zip', Zip) {
     from 'src/main/java'
     from 'src/main/resources'
     into('dist') {
@@ -13,16 +13,16 @@ task zip(type: Zip) {
     }
 }
 
-task unzip(type: Copy) {
+tasks.register('unzip', Copy) {
     dependsOn('zip')
     from zipTree(tasks.zip.archiveFile)
-    into "$buildDir/expanded"
+    into layout.buildDirectory.dir("expanded")
 }
 
-task unzipJar(type: Copy) {
+tasks.register('unzipJar', Copy) {
     dependsOn('jar')
     from zipTree(jar.archiveFile)
-    into "${buildDir}/expanded"
+    into layout.buildDirectory.dir("expandedJar")
 }
 
 repositories {

@@ -17,13 +17,13 @@ tasks.register<Copy>("unzip") {
     dependsOn("zip")
     from(zipTree(tasks.named<Zip>("zip").get()
             .archiveFile.get().asFile))
-    into("$buildDir/expanded")
+    into(layout.buildDirectory.dir("expanded"))
 }
 
 tasks.register<Copy>("unzipJar") {
     dependsOn("jar")
     from(zipTree(tasks.jar.get().archiveFile))
-    into("$buildDir/expanded")
+    into(layout.buildDirectory.dir("expandedJar"))
 }
 
 repositories {
@@ -35,6 +35,6 @@ dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter")
 }
 
-tasks.test {
+tasks.named<Test>("test") {
     useJUnitPlatform()
 }
