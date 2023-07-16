@@ -1,0 +1,39 @@
+plugins {
+    id 'java'
+}
+
+group = 'com.kousenit'
+version = '1.0'
+
+task zip(type: Zip) {
+    from 'src/main/java'
+    from 'src/main/resources'
+    into('dist') {
+        from 'README'
+    }
+}
+
+task unzip(type: Copy) {
+    dependsOn('zip')
+    from zipTree(tasks.zip.archiveFile)
+    into "$buildDir/expanded"
+}
+
+task unzipJar(type: Copy) {
+    dependsOn('jar')
+    from zipTree(jar.archiveFile)
+    into "${buildDir}/expanded"
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testImplementation platform('org.junit:junit-bom:5.9.2')
+    testImplementation 'org.junit.jupiter:junit-jupiter'
+}
+
+test {
+    useJUnitPlatform()
+}
