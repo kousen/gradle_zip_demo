@@ -5,7 +5,7 @@ plugins {
 group = "com.kousenit"
 version = "1.0"
 
-tasks.register<Zip>("zip") {
+val zip by tasks.registering(Zip::class) {
     from("src/main/java")
     from("src/main/resources")
     into("dist") {
@@ -14,9 +14,11 @@ tasks.register<Zip>("zip") {
 }
 
 tasks.register<Copy>("unzip") {
-    dependsOn("zip")
-    from(zipTree(tasks.named<Zip>("zip").get()
-            .archiveFile.get().asFile))
+    //dependsOn("zip")
+//    from(zipTree(tasks.named<Zip>("zip").get()
+//            .archiveFile.get().asFile))
+    // from Cedric Champeau
+    from(zipTree(zip.map(Zip::getArchiveFile)))
     into(layout.buildDirectory.dir("expanded"))
 }
 
